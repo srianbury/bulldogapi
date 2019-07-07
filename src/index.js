@@ -1,11 +1,14 @@
 import 'dotenv/config';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 import express from 'express';
 
 import { users, messages } from './faker';
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 // base
 app.get('/', (req, res) => {
@@ -48,6 +51,16 @@ app.delete('/users/:userId', (req, res) => {
 // messages
 app.get('/messages', (req, res) => {
     return res.send(Object.values(messages));
+});
+
+app.post('/messages', (req, res) => {
+    const id = 10;
+    const message = {
+        id,
+        text: req.body.text
+    };
+    messages[id] = message;
+    return res.send(message);
 });
 
 app.get('/messages/:messageId', (req, res) => {
