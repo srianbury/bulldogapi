@@ -8,4 +8,4 @@ router.get('/', async (req, res) => {
     return res.send(curUser);
 });
 
-export default router;
+export default router;  
