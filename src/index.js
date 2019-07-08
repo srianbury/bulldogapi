@@ -11,14 +11,14 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-// custom middleware
-app.use((req, res, next) => {
+// custom middleware (fake auth)
+app.use(async (req, res, next) => {
     req.context = {
-        models,
-        me: models.users[1]
+      models,
+      me: await models.User.findByLogin('lcamson'),
     };
     next();
-});
+  });
 
 // application routes
 app.use('/session', routes.session);
@@ -38,9 +38,40 @@ connectDb().then(async () => {
             models.User.deleteMany({}),
             models.Message.deleteMany({})
         ]);
+
+        createUsersWithMessages();
     }
 
     app.listen(process.env.PORT, () =>
         console.log(`listening on port ${process.env.PORT}`)
     );
 });
+
+const createUsersWithMessages = async () => {
+    const user1 = new models.User({
+        username: 'lcamson'
+    });
+    const user2 = new models.User({
+        username: 'bsunbury'
+    });
+
+    const message1 = new models.Message({
+        text: 'I am the pandamaaaaaan',
+        user: user1.id
+    });
+    const message2 = new models.Message({
+        text: 'Cant touch this',
+        user: user1.id
+    });
+    const message3 = new models.Message({
+        text: 'Seeded message',
+        user: user2.id
+    });
+
+    await message1.save();
+    await message2.save();
+    await message3.save();
+
+    await user1.save();
+    await user2.save();
+};
