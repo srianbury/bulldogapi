@@ -13,8 +13,12 @@ router.get('/:userId', async (req, res) => {
 });
 
 // todo
-router.post('/', (req, res) => {
-    return res.send('received POST on user');
+router.post('/', async (req, res) => {
+    const user = await req.context.models.User.create({
+        username: req.body.username
+    });
+
+    return res.send(user);
 });
 
 // todo
