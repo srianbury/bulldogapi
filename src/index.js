@@ -30,10 +30,10 @@ app.get('/', (req, res)=>{
 });
 
 // set to true to reinitialize the db everytime the express server starts
-const eraseDbOnStart = true;
+const eraseDbOnReload = true;
 
 connectDb().then(async () => {
-    if(eraseDbOnStart){
+    if(eraseDbOnReload){
         await Promise.all([
             models.User.deleteMany({}),
             models.Message.deleteMany({})
