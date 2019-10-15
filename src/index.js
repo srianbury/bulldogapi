@@ -18,20 +18,21 @@ app.use(async (req, res, next) => {
       me: await models.User.findByLogin('lcamson'),
     };
     next();
-  });
+});
 
 // application routes
 app.use('/session', routes.session);
 app.use('/users', routes.user);
 app.use('/messages', routes.message);
+app.use('/login', routes.login);
 
 app.get('/', (req, res)=>{
-    return res.send('Welcome to my fake api');
+    const welcome = 'Welcome to my fake api';
+    return res.json({ welcome });
 });
 
 // set to true to reinitialize the db everytime the express server starts
-const eraseDbOnReload = true;
-
+const eraseDbOnReload = false;
 connectDb().then(async () => {
     if(eraseDbOnReload){
         await Promise.all([
