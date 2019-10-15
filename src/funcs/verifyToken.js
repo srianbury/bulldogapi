@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+
 /*
     Token format:
     Authorization: Bearer blahblaktokentoken
@@ -8,7 +10,15 @@ function verifyToken(req, res, next){
   if(typeof bearerHeader !== 'undefined'){
     const bearerToken = bearerHeader.split(' ')[1];
     req.token = bearerToken;
-    next();
+
+    jwt.verify(bearerToken, 'scrtky', (error, userInfo) => {
+        req.userInfo = userInfo;
+        if(!error){
+            next();
+        } else {
+            res.status(401).json({ error });
+        }
+    });
   } else {
       const message = 'No Bearer Found.';
       res.status(401).json({ message });

@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(async (req, res, next) => {
     req.context = {
       models,
-      me: await models.User.findByLogin('lcamson'),
+      // me: await models.User.findByLogin('lcamson'),
     };
     next();
 });
@@ -50,10 +50,12 @@ connectDb().then(async () => {
 
 const createUsersWithMessages = async () => {
     const user1 = new models.User({
-        username: 'lcamson'
+        username: 'lcamson',
+        password: 'iamlhito'
     });
     const user2 = new models.User({
-        username: 'bsunbury'
+        username: 'bsunbury',
+        password: 'peepeepoopoo'
     });
 
     const message1 = new models.Message({
