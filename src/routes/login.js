@@ -24,7 +24,10 @@ router.post('/', async (req, res) => {
 async function verifyLogin(req){
     const { username: givenUname, password: givenPwd } = req.body;
     const user = await req.context.models.User.findByLogin(givenUname);
-    const { username: dbUname, password: dbPwd } = await user;
+    const { _id: uid } = await user;
+
+    const userPwd = await req.context.models.UserPassword.findByUid(uid);
+    const { password: dbPwd } = await userPwd;
 
     return givenPwd===dbPwd ? user : null;
 }

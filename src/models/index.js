@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 import User from './user';
 import Message from './message';
+import UserPassword from './password';
 
 
 const connectDb = () => {
@@ -9,7 +10,8 @@ const connectDb = () => {
 }
 const models = {
     User,
-    Message
+    Message,
+    UserPassword
 };
 
 

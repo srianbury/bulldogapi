@@ -32,12 +32,13 @@ app.get('/', (req, res)=>{
 });
 
 // set to true to reinitialize the db everytime the express server starts
-const eraseDbOnReload = false;
+const eraseDbOnReload = true;
 connectDb().then(async () => {
     if(eraseDbOnReload){
         await Promise.all([
             models.User.deleteMany({}),
-            models.Message.deleteMany({})
+            models.Message.deleteMany({}),
+            models.UserPassword.deleteMany({}),
         ]);
 
         createUsersWithMessages();
@@ -51,11 +52,17 @@ connectDb().then(async () => {
 const createUsersWithMessages = async () => {
     const user1 = new models.User({
         username: 'lcamson',
+    });
+    const user1Password = new models.UserPassword({
+        uid: user1.id,
         password: 'iamlhito'
     });
     const user2 = new models.User({
         username: 'bsunbury',
-        password: 'peepeepoopoo'
+    });
+    const user2Password = new models.UserPassword({
+        uid: user2.id,
+        password: 'brianspwd'
     });
 
     const message1 = new models.Message({
@@ -74,6 +81,9 @@ const createUsersWithMessages = async () => {
     await message1.save();
     await message2.save();
     await message3.save();
+
+    await user1Password.save();
+    await user2Password.save();
 
     await user1.save();
     await user2.save();
