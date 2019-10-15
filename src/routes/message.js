@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { verifyToken } from '../funcs';
-import jwt from 'jsonwebtoken';
 
 const router = Router();
 
@@ -10,20 +9,12 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', verifyToken, async (req, res) => {
-    jwt.verify(req.token, 'scrtky', async (error, authData) => {
-        if(!error){
-            const message = await req.context.models.Message.create({   
-                text: req.body.text,
-                user: req.context.me.id
-            });
-        
-            res.json({ message, authData });
-
-        } else {
-            res.status(401).json({ error });
-        }
+    const message = await req.context.models.Message.create({   
+        text: req.body.text,
+        user: req.userInfo.user._id
     });
-    
+
+    res.json({ message });
 });
 
 router.get('/:messageId', async (req, res) => {
