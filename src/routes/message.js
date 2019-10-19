@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { verifyToken } from '../funcs';
 
 const router = Router();
 
@@ -7,13 +8,13 @@ router.get('/', async (req, res) => {
     return res.send(messages);
 });
 
-router.post('/', async (req, res) => {
-    const message = await req.context.models.Message.create({
+router.post('/', verifyToken, async (req, res) => {
+    const message = await req.context.models.Message.create({   
         text: req.body.text,
-        user: req.context.me.id
+        user: req.userInfo.user._id
     });
 
-    return res.send(message);
+    res.json({ message });
 });
 
 router.get('/:messageId', async (req, res) => {

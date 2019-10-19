@@ -5,38 +5,41 @@ import express from 'express';
 
 import models, { connectDb } from './models';
 import routes from './routes';
+import { encrypt } from './funcs';
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-// custom middleware (fake auth)
+// custom middleware
 app.use(async (req, res, next) => {
     req.context = {
       models,
-      me: await models.User.findByLogin('lcamson'),
+      // me: await models.User.findByLogin('lcamson'),
     };
     next();
-  });
+});
 
 // application routes
-app.use('/session', routes.session);
-app.use('/users', routes.user);
-app.use('/messages', routes.message);
+app.use(`/api/${process.env.ENVIRONMENT}/session`, routes.session);
+app.use(`/api/${process.env.ENVIRONMENT}/users`, routes.user);
+app.use(`/api/${process.env.ENVIRONMENT}/messages`, routes.message);
+app.use(`/api/${process.env.ENVIRONMENT}/login`, routes.login);
 
 app.get('/', (req, res)=>{
-    return res.send('Welcome to my fake api');
+    const welcome = 'Welcome to my fake api';
+    return res.json({ welcome });
 });
 
 // set to true to reinitialize the db everytime the express server starts
 const eraseDbOnReload = true;
-
 connectDb().then(async () => {
     if(eraseDbOnReload){
         await Promise.all([
             models.User.deleteMany({}),
-            models.Message.deleteMany({})
+            models.Message.deleteMany({}),
+            models.UserPassword.deleteMany({}),
         ]);
 
         createUsersWithMessages();
@@ -49,10 +52,18 @@ connectDb().then(async () => {
 
 const createUsersWithMessages = async () => {
     const user1 = new models.User({
-        username: 'lcamson'
+        username: 'lcamson',
+    });
+    const user1Password = new models.UserPassword({
+        uid: user1.id,
+        password: encrypt('iamlhito')
     });
     const user2 = new models.User({
-        username: 'bsunbury'
+        username: 'bsunbury',
+    });
+    const user2Password = new models.UserPassword({
+        uid: user2.id,
+        password: encrypt('brianspwd')
     });
 
     const message1 = new models.Message({
@@ -71,6 +82,9 @@ const createUsersWithMessages = async () => {
     await message1.save();
     await message2.save();
     await message3.save();
+
+    await user1Password.save();
+    await user2Password.save();
 
     await user1.save();
     await user2.save();
