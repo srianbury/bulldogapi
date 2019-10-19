@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-// custom middleware (fake auth)
+// custom middleware
 app.use(async (req, res, next) => {
     req.context = {
       models,
