@@ -11,7 +11,7 @@ function verifyToken(req, res, next){
     const bearerToken = bearerHeader.split(' ')[1];
     req.token = bearerToken;
 
-    jwt.verify(bearerToken, 'scrtky', (error, userInfo) => {
+    jwt.verify(bearerToken, process.env.JWT_SCRT_KEY, (error, userInfo) => {
         req.userInfo = userInfo;
         if(!error){
             next();

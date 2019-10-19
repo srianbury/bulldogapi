@@ -5,6 +5,7 @@ import express from 'express';
 
 import models, { connectDb } from './models';
 import routes from './routes';
+import { encrypt } from './funcs';
 
 const app = express();
 app.use(cors());
@@ -21,10 +22,10 @@ app.use(async (req, res, next) => {
 });
 
 // application routes
-app.use('/session', routes.session);
-app.use('/users', routes.user);
-app.use('/messages', routes.message);
-app.use('/login', routes.login);
+app.use(`/api/${process.env.ENVIRONMENT}/session`, routes.session);
+app.use(`/api/${process.env.ENVIRONMENT}/users`, routes.user);
+app.use(`/api/${process.env.ENVIRONMENT}/messages`, routes.message);
+app.use(`/api/${process.env.ENVIRONMENT}/login`, routes.login);
 
 app.get('/', (req, res)=>{
     const welcome = 'Welcome to my fake api';
@@ -55,14 +56,14 @@ const createUsersWithMessages = async () => {
     });
     const user1Password = new models.UserPassword({
         uid: user1.id,
-        password: 'iamlhito'
+        password: encrypt('iamlhito')
     });
     const user2 = new models.User({
         username: 'bsunbury',
     });
     const user2Password = new models.UserPassword({
         uid: user2.id,
-        password: 'brianspwd'
+        password: encrypt('brianspwd')
     });
 
     const message1 = new models.Message({

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
+import { decrypt } from '../funcs';
 
 const router = Router();
 
@@ -7,11 +8,11 @@ router.post('/', async (req, res) => {
     const user = await verifyLogin(req);
 
     if(user){
-        jwt.sign({ user }, 'scrtky', (err, token) => {
+        jwt.sign({ user }, process.env.JWT_SCRT_KEY, (err, token) => {
             if(!err){
                 res.json({ user, token });
             } else {
-                res.status(500).json({ err });
+                res.status(500).json({ err });  
             }
         });
     } else {
@@ -29,7 +30,7 @@ async function verifyLogin(req){
     const userPwd = await req.context.models.UserPassword.findByUid(uid);
     const { password: dbPwd } = await userPwd;
 
-    return givenPwd===dbPwd ? user : null;
+    return givenPwd===decrypt(dbPwd) ? user : null;
 }
 
 export default router;
