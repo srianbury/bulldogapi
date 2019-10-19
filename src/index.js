@@ -6,6 +6,7 @@ import express from 'express';
 import models, { connectDb } from './models';
 import routes from './routes';
 import { encrypt } from './funcs';
+import { useModels } from './middleware';
 
 const app = express();
 app.use(cors());
@@ -13,13 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
 // custom middleware
-app.use(async (req, res, next) => {
-    req.context = {
-      models,
-      // me: await models.User.findByLogin('lcamson'),
-    };
-    next();
-});
+app.use(useModels);
 
 // application routes
 app.use(`/api/${process.env.ENVIRONMENT}/session`, routes.session);
@@ -27,13 +22,14 @@ app.use(`/api/${process.env.ENVIRONMENT}/users`, routes.user);
 app.use(`/api/${process.env.ENVIRONMENT}/messages`, routes.message);
 app.use(`/api/${process.env.ENVIRONMENT}/login`, routes.login);
 
-app.get('/', (req, res)=>{
+app.get('/api/', (req, res)=>{
     const welcome = 'Welcome to my fake api';
     return res.json({ welcome });
 });
 
 // set to true to reinitialize the db everytime the express server starts
-const eraseDbOnReload = true;
+const erase = true;
+const eraseDbOnReload = process.env.NODE_ENV!=='production' && erase;
 connectDb().then(async () => {
     if(eraseDbOnReload){
         await Promise.all([
