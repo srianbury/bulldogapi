@@ -6,28 +6,28 @@ const router = Router();
 
 router.post("/", async (req, res) => {
   const user = await getUser(req);
-  if (user) {
-    const ok = await verifyLogin(user, req);
-    if (ok) {
-      jwt.sign({ user }, process.env.JWT_SCRT_KEY, (err, token) => {
-        if (!err) {
-          res.json({ user, token });
-        } else {
-          res.status(500).json({ err });
-        }
-      });
-    } else {
-      res.status(401).json({
-        error: "Username and password do not match."
-      });
-    }
-  } else {
-    res.status(404).json({ error: "Username does not exist." });
+  if (!user) {
+    return res.status(404).json({ error: "Username does not exist." });
   }
+
+  const pwdMatch = await verifyLogin(user, req);
+  if (!pwdMatch) {
+    return res
+      .status(401)
+      .json({ error: "Username and password do not match." });
+  }
+
+  jwt.sign({ user }, process.env.JWT_SCRT_KEY, (err, token) => {
+    if (err) {
+      return res.status(500).json({ err });
+    } else {
+      return res.json({ user, token });      
+    }
+  });
 });
 
 async function getUser(req) {
-  const { username: givenUname, password: givenPwd } = req.body;
+  const { username: givenUname } = req.body;
   const user = await req.context.models.User.findByLogin(givenUname);
   return user;
 }
