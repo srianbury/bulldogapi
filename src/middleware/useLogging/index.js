@@ -1,3 +1,3 @@
-import logger from './replaceme';
+import logger from './sentry';
 
 export default logger;
