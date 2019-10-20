@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
     if (err) {
       return res.status(500).json({ err });
     } else {
-      return res.json({ user, token });      
+      return res.json({ user, token });
     }
   });
 });
