@@ -6,7 +6,7 @@ import express from 'express';
 import models, { connectDb } from './models';
 import routes from './routes';
 import { encrypt } from './funcs';
-import { useModels } from './middleware';
+import { useModels, logger } from './middleware';
 
 const app = express();
 app.use(cors());
@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
 // custom middleware
+app.use(logger);
 app.use(useModels);
 
 // application routes
