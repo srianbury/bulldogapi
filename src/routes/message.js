@@ -24,13 +24,13 @@ router.post(
             user: req.userInfo.user._id
         });
     
-        res.json({ message });
+        return res.json({ message });
     }
 );
 
 router.get('/:messageId', async (req, res) => {
     const message = await req.context.models.Message.findById(req.params.messageId);
-    return res.send(message);
+    return res.json({ message });
 });
 
 router.delete('/:messageId', async (req, res) => {
@@ -41,7 +41,7 @@ router.delete('/:messageId', async (req, res) => {
         result = await message.remove();
     }
 
-    return res.send(result);
+    return res.json({ result });
 });
 
 export default router;

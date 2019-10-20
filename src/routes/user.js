@@ -4,12 +4,12 @@ const router = Router();
 
 router.get('/', async (req, res) => {
     const users = await req.context.models.User.find();
-    return res.send(users);
+    return res.json({ users });
 });
 
 router.get('/:userId', async (req, res) => {
     const user = await req.context.models.User.findById(req.params.userId);
-    return res.send(user);
+    return res.json({ user });
 });
 
 router.post('/', async (req, res) => {
@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
         username: req.body.username
     });
 
-    return res.send(user);
+    return res.json({ user });
 });
 
 router.put('/:userId', async (req, res) => {
@@ -30,7 +30,7 @@ router.put('/:userId', async (req, res) => {
         returnType
     );
 
-    return res.send(user);
+    return res.json({ user });
 });
 
 router.delete('/:userId', async (req, res) => {
@@ -38,7 +38,7 @@ router.delete('/:userId', async (req, res) => {
     const user = await req.context.models.User.findById(req.params.userId);
     await req.context.models.User.deleteOne(query);
     
-    return res.send(user);
+    return res.json({ user });
 });
 
 export default router;
