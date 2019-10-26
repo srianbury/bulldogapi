@@ -5,7 +5,7 @@ function validateParameters(req, res, next){
     if(missingParameters.isEmpty()){
         next();
     } else {
-        return res.status(422).json({ errors: missingParameters.array() });
+        return res.status(422).json({ error: missingParameters.array() });
     }
 }
 

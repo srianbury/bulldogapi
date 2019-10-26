@@ -4,6 +4,7 @@ import { encrypt } from '../funcs';
 async function createUsersAndDogs(){
     const user1 = new models.User({
         username: 'ricko',
+        email: 'bsunbury29+ricko@gmail.com',
     });
     const user1Password = new models.UserPassword({
         uid: user1.id,
@@ -11,6 +12,7 @@ async function createUsersAndDogs(){
     });
     const user2 = new models.User({
         username: 'bob',
+        email: 'bsunbury29+bob@gmail.com',
     });
     const user2Password = new models.UserPassword({
         uid: user2.id,

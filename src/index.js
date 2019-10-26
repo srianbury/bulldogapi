@@ -26,9 +26,10 @@ app.use(`/api/${process.env.ENVIRONMENT}/session`, routes.session);
 app.use(`/api/${process.env.ENVIRONMENT}/users`, routes.user);
 app.use(`/api/${process.env.ENVIRONMENT}/dogs`, routes.dog);
 app.use(`/api/${process.env.ENVIRONMENT}/login`, routes.login);
+app.use(`/api/${process.env.ENVIRONMENT}/signup`, routes.signup);
 
 app.get('/api/', (req, res)=>{
-    const welcome = 'Welcome to my fake api';
+    const welcome = 'Bulldogs';
     return res.json({ welcome });
 });
 
