@@ -26,13 +26,13 @@ router.post(
     const { username, email, password, confirmPassword } = req.body;
 
     if (password !== confirmPassword) {
-      return res.status(400).json({ error: "Passwords do not match. " });
+      return res.status(409).json({ error: "Passwords do not match." });
     }
 
     try {
       const user = await req.context.models.User.create({
         username,
-        email
+        email,
       });
       await req.context.models.UserPassword.create({
         uid: user._id,
