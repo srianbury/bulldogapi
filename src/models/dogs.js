@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
+import { ACCESS } from '../constants';
 
 const dogSchema = new mongoose.Schema({
+    editAccess: {
+        type: Array,
+        default: [ACCESS.ADMIN, ACCESS.MINDFLAYER],
+    },
     name: {
         type: String,
     },

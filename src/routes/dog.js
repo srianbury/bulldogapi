@@ -13,4 +13,10 @@ router.get('/:id', async (req, res) => {
     return res.json({ data: dog });
 });
 
+
+router.put('/:id', async (req, res) => {
+    const data = req.body;
+    return res.json({ data });  
+});
+
 export default router;
