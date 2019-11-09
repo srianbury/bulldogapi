@@ -1,6 +1,8 @@
 import models from '../models';
 import { encrypt } from '../funcs';
 import { ACCESS } from '../constants';
+import parentsPlaceholders from './placeholders/parents';
+import litterPlaceholder from './placeholders/litters';
 
 async function createUsersAndDogs(){
     const user1 = new models.User({
@@ -22,20 +24,15 @@ async function createUsersAndDogs(){
         password: encrypt('heyarnold')
     });
 
-    const dog1 = new models.Dog({
-        name: 'Stanley',
-        birthday: '05/15/2016',
-        sex: 0,
-        breed: '3/4 English Bulldog',
-        images: [
-            { 
-                url: 'https://stanleybulldogs.com/static/media/stanley.47c7c736.jpg',
-                alt: 'stanley'
-            }
-        ]
+    parentsPlaceholders.map(async parent => {
+        const dog = new models.Dog(parent);
+        await dog.save();
     });
 
-    await dog1.save();
+    litterPlaceholder.map(async litter => {
+        const lit = new models.Litter(litter);
+        await lit.save();
+    });
 
     await user1Password.save();
     await user2Password.save();

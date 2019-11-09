@@ -4,6 +4,7 @@ import message from './message';
 import login from './login';
 import dog from './dog';
 import signup from './signup';
+import litter from './litter';
 
 export default {
     session,
@@ -11,5 +12,6 @@ export default {
     message,
     login,
     dog,
-    signup
+    signup,
+    litter
 }

@@ -25,6 +25,7 @@ app.use(useModels);
 app.use(`/api/${process.env.ENVIRONMENT}/session`, routes.session);
 app.use(`/api/${process.env.ENVIRONMENT}/users`, routes.user);
 app.use(`/api/${process.env.ENVIRONMENT}/dogs`, routes.dog);
+app.use(`/api/${process.env.ENVIRONMENT}/litters`, routes.litter);
 app.use(`/api/${process.env.ENVIRONMENT}/login`, routes.login);
 app.use(`/api/${process.env.ENVIRONMENT}/signup`, routes.signup);
 
@@ -44,6 +45,7 @@ connectDb().then(async () => {
             models.User.deleteMany({}),
             models.Dog.deleteMany({}),
             models.UserPassword.deleteMany({}),
+            models.Litter.deleteMany({}),
         ]);
 
         await populatedb();
