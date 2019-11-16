@@ -1,24 +1,24 @@
-import 'dotenv/config';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import express from 'express';
-import * as Sentry from '@sentry/node';
+import "dotenv/config";
+import cors from "cors";
+import bodyParser from "body-parser";
+import express from "express";
+import * as Sentry from "@sentry/node";
 
-import models, { connectDb } from './models';
-import routes from './routes';
-import { useModels, logger } from './middleware';
-import { populatedb } from './dev';
+import models, { connectDb } from "./models";
+import routes from "./routes";
+import { useModels } from "./middleware";
+import { populatedb } from "./dev";
 
 const app = express();
-if(process.env.NODE_ENV==='production'){
-    console.log('initializing logger');
-    Sentry.init({ dsn: process.env.SENTRY_URL });
-    app.use(Sentry.Handlers.requestHandler());
-    // app.use(logger); // replaced with sentry's middleware
+if (process.env.NODE_ENV === "production") {
+  // console.log("initializing logger");
+  Sentry.init({ dsn: process.env.SENTRY_URL });
+  app.use(Sentry.Handlers.requestHandler());
+  // app.use(logger); // replaced with sentry's middleware
 }
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(useModels);
 
 // application routes
@@ -28,30 +28,36 @@ app.use(`/api/${process.env.ENVIRONMENT}/dogs`, routes.dog);
 app.use(`/api/${process.env.ENVIRONMENT}/litters`, routes.litter);
 app.use(`/api/${process.env.ENVIRONMENT}/login`, routes.login);
 app.use(`/api/${process.env.ENVIRONMENT}/signup`, routes.signup);
+app.use(`/api/${process.env.ENVIRONMENT}/home`, routes.home);
+app.use(`/api/${process.env.ENVIRONMENT}/gallery`, routes.gallery);
 
-app.get('/api/', (req, res)=>{
-    const welcome = 'Bulldogs';
-    return res.json({ welcome });
+app.get("/api/", (req, res) => {
+  const welcome = "Bulldogs";
+  return res.json({ welcome });
 });
 
-app.use(Sentry.Handlers.errorHandler());
+if (process.env.NODE_ENV === "production") {
+  app.use(Sentry.Handlers.errorHandler());
+}
 
 // set to true to reinitialize the db everytime the express server starts
 const erase = true;
-const eraseDbOnReload = process.env.NODE_ENV!=='production' && erase;
+const eraseDbOnReload = process.env.NODE_ENV !== "production" && erase;
 connectDb().then(async () => {
-    if(eraseDbOnReload){
-        await Promise.all([
-            models.User.deleteMany({}),
-            models.Dog.deleteMany({}),
-            models.UserPassword.deleteMany({}),
-            models.Litter.deleteMany({}),
-        ]);
+  if (eraseDbOnReload) {
+    await Promise.all([
+      models.User.deleteMany({}),
+      models.Dog.deleteMany({}),
+      models.UserPassword.deleteMany({}),
+      models.Litter.deleteMany({}),
+      models.Blurp.deleteMany({}),
+      models.Gallery.deleteMany({})
+    ]);
 
-        await populatedb();
-    }
+    await populatedb();
+  }
 
-    app.listen(process.env.PORT, () =>
-        console.log(`listening on port ${process.env.PORT}`)
-    );
+  app.listen(process.env.PORT, () =>
+    console.log(`listening on port ${process.env.PORT}`)
+  );
 });
