@@ -1,3 +1,4 @@
-import * as ACCESS from './access';
+import * as ACCESS from "./access";
+import * as BLURPS from "./blurps";
 
-export { ACCESS };
+export { ACCESS, BLURPS };
