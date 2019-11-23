@@ -5,10 +5,29 @@ import Dog from "./dogs";
 import Litter from "./litters";
 import Blurp from "./blurps";
 import Gallery from "./gallery";
+import { populatedb } from "../dev";
 
-function connectDb() {
-  mongoose.set("useFindAndModify", false);
-  return mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
+async function connectDb() {
+  return await mongoose.connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true,
+    useFindAndModify: true,
+    useUnifiedTopology: true
+  });
+}
+
+async function populate(eraseDbOnReload) {
+  if (eraseDbOnReload) {
+    await Promise.all([
+      models.User.deleteMany({}),
+      models.Dog.deleteMany({}),
+      models.UserPassword.deleteMany({}),
+      models.Litter.deleteMany({}),
+      models.Blurp.deleteMany({}),
+      models.Gallery.deleteMany({})
+    ]);
+
+    await populatedb();
+  }
 }
 
 const models = {
@@ -21,4 +40,4 @@ const models = {
 };
 
 export default models;
-export { connectDb };
+export { connectDb, populate };
