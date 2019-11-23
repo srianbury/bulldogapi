@@ -7,6 +7,7 @@ import Blurp from "./blurps";
 import Gallery from "./gallery";
 
 function connectDb() {
+  mongoose.set("useFindAndModify", false);
   return mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 }
 
