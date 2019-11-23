@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import * as Sentry from "@sentry/node";
 
-import models, { connectDb } from "./models";
+import models, { connectDb, populate } from "./models";
 import routes from "./routes";
 import { useModels } from "./middleware";
 import { populatedb } from "./dev";
@@ -43,21 +43,14 @@ if (process.env.NODE_ENV === "production") {
 // set to true to reinitialize the db everytime the express server starts
 const erase = true;
 const eraseDbOnReload = process.env.NODE_ENV !== "production" && erase;
-connectDb().then(async () => {
-  if (eraseDbOnReload) {
-    await Promise.all([
-      models.User.deleteMany({}),
-      models.Dog.deleteMany({}),
-      models.UserPassword.deleteMany({}),
-      models.Litter.deleteMany({}),
-      models.Blurp.deleteMany({}),
-      models.Gallery.deleteMany({})
-    ]);
 
-    await populatedb();
-  }
+async function connect() {
+  await connectDb();
+  await populate(eraseDbOnReload);
+}
 
-  app.listen(process.env.PORT, () =>
-    console.log(`listening on port ${process.env.PORT}`)
-  );
-});
+connect();
+
+app.listen(process.env.PORT, () =>
+  console.log(`listening on port ${process.env.PORT}`)
+);
