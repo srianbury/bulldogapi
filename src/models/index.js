@@ -10,7 +10,7 @@ import { populatedb } from "../dev";
 async function connectDb() {
   return await mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
-    useFindAndModify: true,
+    useFindAndModify: false,
     useUnifiedTopology: true
   });
 }
