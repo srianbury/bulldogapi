@@ -3,11 +3,11 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import express from "express";
 import * as Sentry from "@sentry/node";
-
 import models, { connectDb, populate } from "./models";
 import routes from "./routes";
 import { useModels } from "./middleware";
 import { populatedb } from "./dev";
+import cloudinary from "cloudinary";
 
 const app = express();
 if (process.env.NODE_ENV === "production") {
@@ -30,10 +30,17 @@ app.use(`/api/${process.env.ENVIRONMENT}/login`, routes.login);
 app.use(`/api/${process.env.ENVIRONMENT}/signup`, routes.signup);
 app.use(`/api/${process.env.ENVIRONMENT}/home`, routes.home);
 app.use(`/api/${process.env.ENVIRONMENT}/gallery`, routes.gallery);
+app.use(`/api/${process.env.ENVIRONMENT}/images`, routes.images);
 
 app.get("/api/", (req, res) => {
   const welcome = "Bulldogs";
   return res.json({ welcome });
+});
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET
 });
 
 if (process.env.NODE_ENV === "production") {
