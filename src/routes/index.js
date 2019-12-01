@@ -7,6 +7,7 @@ import signup from "./signup";
 import litter from "./litter";
 import home from "./home";
 import gallery from "./gallery";
+import images from "./images";
 
 export default {
   session,
@@ -17,5 +18,6 @@ export default {
   signup,
   litter,
   home,
-  gallery
+  gallery,
+  images
 };
