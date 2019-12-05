@@ -1,45 +1,61 @@
 const FIRST = {
-  birthday: '08/15/2018',
+  birthday: "08/15/2018",
   parents: {
-    mom: 'Hannah',
-    dad: 'Stanley'
+    mom: "Hannah",
+    dad: "Stanley"
   },
   images: [
     {
-      url: 'https://stanleybulldogs.com/static/media/01.7ea6aed0.jpg',
-      useForHomepage: true,
+      url:
+        "https://res.cloudinary.com/bsunbury/image/upload/v1575517285/prod/05_iclhrv.jpg",
+      useForHomepage: true
     },
     {
-      url: 'https://stanleybulldogs.com/static/media/02.fb0244a4.jpg',
-      useForHomepage: false,
+      url:
+        "https://res.cloudinary.com/bsunbury/image/upload/v1575517285/prod/02_wqg6dx.jpg",
+      useForHomepage: false
     },
     {
-      url: 'https://stanleybulldogs.com/static/media/04.eabad2dc.jpg',
-      useForHomepage: true,
+      url:
+        "https://res.cloudinary.com/bsunbury/image/upload/v1575517285/prod/01_w14njt.jpg",
+      useForHomepage: true
     },
-  ],
+    {
+      url:
+        "https://res.cloudinary.com/bsunbury/image/upload/v1575517285/prod/03_ulncpj.jpg",
+      useForHomepage: true
+    },
+    {
+      url:
+        "https://res.cloudinary.com/bsunbury/image/upload/v1575517285/prod/04_lgbswn.jpg",
+      useForHomepage: true
+    },
+    {
+      url:
+        "https://res.cloudinary.com/bsunbury/image/upload/v1575517285/prod/031_gbuynv.jpg",
+      useForHomepage: true
+    }
+  ]
 };
 
 const SECOND = {
-  birthday: '05/15/2019',
+  birthday: "05/15/2019",
   parents: {
-    mom: 'Hannah',
-    dad: 'Stanley'
+    mom: "Hannah",
+    dad: "Stanley"
   },
   images: [
     {
-      url: 'https://stanleybulldogs.com/static/media/15.9615d01a.JPG',
-      useForHomepage: false,
+      url:
+        "https://res.cloudinary.com/bsunbury/image/upload/v1575517268/prod/16_ovrlf4.jpg",
+      useForHomepage: false
     },
     {
-      url: 'https://stanleybulldogs.com/static/media/16.075932d2.JPG',
-      useForHomepage: true,
-    },
-    {
-      url: 'https://stanleybulldogs.com/static/media/10.61aabdd5.JPG',
-      useForHomepage: false,
-    },
-  ],
+      url:
+        "https://res.cloudinary.com/bsunbury/image/upload/v1575517268/prod/15_e1r0h5.jpg",
+      useForHomepage: true
+    }
+  ]
 };
 
-export default [ FIRST, SECOND ];
+export default [FIRST, SECOND];
