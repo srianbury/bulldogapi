@@ -2,7 +2,7 @@ import { Router } from "express";
 import cloudinary from "cloudinary";
 import cloudinaryStorage from "multer-storage-cloudinary";
 import multer from "multer";
-import { verifyToken } from "../funcs";
+import { verifyToken, verifyAdminAccess } from "../funcs";
 
 const router = Router();
 
@@ -18,6 +18,7 @@ const multerParser = multer({ storage });
 router.post(
   "/",
   verifyToken,
+  verifyAdminAccess,
   multerParser.array("images"),
   async (req, res) => {
     try {

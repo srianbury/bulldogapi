@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verifyToken } from "../funcs";
+import { verifyToken, verifyAdminAccess } from "../funcs";
 import { check } from "express-validator";
 import { useParameterValidation } from "../middleware";
 
@@ -14,6 +14,7 @@ const requiredPostParams = [check("text").isString()];
 router.post(
   "/",
   verifyToken,
+  verifyAdminAccess,
   requiredPostParams,
   useParameterValidation,
   async (req, res) => {
