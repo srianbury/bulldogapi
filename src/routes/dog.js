@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verifyToken } from "../funcs";
+import { verifyToken, verifyAdminAccess } from "../funcs";
 
 const router = Router();
 
@@ -13,7 +13,7 @@ router.get("/:id", async (req, res) => {
   return res.json({ data: dog });
 });
 
-router.put("/:id", verifyToken, async (req, res) => {
+router.put("/:id", verifyToken, verifyAdminAccess, async (req, res) => {
   const data = req.body;
   const updatedDocument = await req.context.models.Dog.findOneAndUpdate(
     { _id: req.params.id },
