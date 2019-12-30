@@ -7,6 +7,9 @@ async function verifyAccessInList(allowedRoles, req, res, next) {
   try {
     const { _id } = req.userInfo.user;
     const user = await req.context.models.User.findById(_id);
+    if (!user) {
+      throw new Error("User not found.");
+    }
     const accessLevel = user.access;
     if (allowedRoles.includes(accessLevel)) {
       next();
